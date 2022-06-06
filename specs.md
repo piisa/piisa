@@ -305,8 +305,8 @@ Two examples of the format are:
 {"type":"GOV_ID","subtype":"SSN","value":"536-90-4399","lang":"en","country":"us","chunkid":"12","pos":102",detectorid":"02"}
 {"type":"GOV_ID","subtype":"NIF","value":"34657934-Q","lang":"es","country":"es","chunkid":"1","pos":10",detectorid":"02"}
 
+```
 
-<!-- Footnotes themselves at the bottom. -->
 ## Notes
 
 [^1]:
