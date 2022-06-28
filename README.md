@@ -8,7 +8,7 @@ PIISA stands for a *Personal Identifiable Information Standard*. This standard a
 
 ## Who are we
 
-We are a team of privacy enthusiasts who are interested in improving de-identification across multiple domains. 
+We are a team of privacy enthusiasts who are interested in improving PII management across multiple domains. 
 - [Read our blog posts](https://privacyprotection.substack.com/).
 - Current contributors to this codebase:
   - [@paulovn](https://github.com/paulovn)
