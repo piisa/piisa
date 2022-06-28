@@ -80,7 +80,7 @@ We need to balance two conflicting requirements
 1. an easy format to work with: it needs to be machine-processable but also amenable to human editing and reading
 2. an expressive format: able to reflect (at least to some level) the document structure, since that structure might be important to connect PII elements
 
-There are quite sophisticated “Layout” formats for text documents: Word documents (Office Open XML aka OOXML), PDF files, RTF, ODF (Open Document), etc. They are very complex, with specifications compressing many pages, since they allow the complete and precise specification of all aspects of document layout, structure and presentation. They would, of course, offer the greatest nuance in determining the relationships between the text chunks they contain[^1], but would be too difficult to handle for our purpose of consolidating a data interchange format for PII processing that has “reasonable” complexity.
+There are quite sophisticated “Layout” formats for text documents: Word documents (Office Open XML aka OOXML), PDF files, RTF, ODF (Open Document), etc. They are very complex, with specifications compressing many pages, since they allow the complete and precise specification of all aspects of document layout, structure and presentation. They would, of course, offer the greatest nuance in determining the relationships between the text chunks they contain[^1], but would be too difficult to handle for our purpose of consolidating a data interchange format for PII processing that has “reasonable” complexity. There are also image documents (PDF, PNG, JPEG, …), with non-textual PII like people's faces, fingerprints, medical scans or signatures, which we do not consider at all at this point.
 
 Instead, we are aiming at a simpler solution. As a very minimum, a document
 can be considered as _a collection of text chunks_. How those chunks are
@@ -198,8 +198,8 @@ Beyond the header, each chunk contains a small dictionary with 2 or 3 elements:
   of them optional:
    - _global_: it will be a link/transposition of the context in the document
      header, as described above
-   - _before_ (optional): a small section of data from the chunk preceding this
-     one, containing the closest rows to this chunk
+   - _before_: a small section of data from the chunk preceding this one,
+     containing the closest rows to this chunk
    - _after_: a small section of data from the chunk following this one,
      containing the closest rows to this chunk
 
