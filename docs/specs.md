@@ -1,6 +1,6 @@
 # PII data specification
 
-## Version 0.2.1
+## Version 0.3.0
 
 <!-- START doctoc -->
 <!-- END doctoc -->
@@ -80,14 +80,50 @@ We need to balance two conflicting requirements
 1. an easy format to work with: it needs to be machine-processable but also amenable to human editing and reading
 2. an expressive format: able to reflect (at least to some level) the document structure, since that structure might be important to connect PII elements
 
-There are quite sophisticated “Layout” formats for text documents: Word documents (Office Open XML aka OOXML), PDF files, RTF, ODF (Open Document), etc. They are very complex, with specifications compressing many pages, since they allow the complete and precise specification of all aspects of document layout, structure and presentation. They would, of course, offer the greatest nuance in determining the relationships between the text chunks they contain[^1], but would be too difficult to handle for our purpose of consolidating a data interchange format for PII processing that has “reasonable” complexity.
+There are quite sophisticated “Layout” formats for text documents: Word documents (Office Open XML aka OOXML), PDF files, RTF, ODF (Open Document), etc. They are very complex, with specifications compressing many pages, since they allow the complete and precise specification of all aspects of document layout, structure and presentation. They would, of course, offer the greatest nuance in determining the relationships between the text chunks they contain[^1], but would be too difficult to handle for our purpose of consolidating a data interchange format for PII processing that has “reasonable” complexity. There are also image documents (PDF, PNG, JPEG, …), with non-textual PII like people's faces, fingerprints, medical scans or signatures, which we do not consider at all at this point.
 
-Instead, we are aiming at a simpler solution. As a very minimum, a document can be considered as _a collection of text chunks_. How those chunks are structured is what generates the model to be represented. In general terms, we will consider two main document models:
+Instead, we are aiming at a simpler solution. As a very minimum, a document
+can be considered as _a collection of text chunks_. How those chunks are
+structured is what generates the model to be represented. In general terms, we
+will consider three main document model types:
 
-* a **hierarchical** model: a top-down structure relates text chunks one to another
+* a **sequential** model: a document is composed by a list of consecutive chunks
+* a **tree** model: a hierarchical top-down structure relates text chunks one to another, so that chunks can be nested
 * a **tabular** model: a 2-D structure (i.e. something that can be expressed as rows and columns, with the implicit assumption of some semantic linking across rows and columns)
 
-There might be mixed documents, which contain both hierarchical and tabular sections, or other structures.
+There might be mixed documents, which contain both tree and tabular sections, or other structures.
+
+The general shape of a source document is given by a document header plus a
+set of chunks. A chunk is intended to contain a portion of the document with
+self-contained; the exact shape of a chunk depends on the document type 
+
+#### Document header
+
+The document header contains metadata applicable to the full document. The
+following fields are specified (all of them are optional):
+* `id`: an arbitrary identifier for the document. If the document belongs to
+  a dataset, it should be unique across all documents in the dataset.
+* `type`: the model type for the document (_sequential_, _tree_, _tabular_).
+  Default value, when the field is not present, is _sequential_
+* `date`: an ISO 8601 date defining the creation date of the document
+* `main_lang`: an ISO 639-1 code describing the language the document is in.
+  For documents containing more than one language, it should express the
+  the most frequent language in the document.
+* `other_lang`: a list of ISO 639-1 codes indicating other languages present
+  in the document
+* `country`: a list of one or more ISO 3166-1 country codes for which the
+  document may be applicable (this might be used to further define the
+  applicability of country-dependent PII elements)
+* `context`: an element containing metadata applicable to the document. If
+  present, it will contain a variable number of context fields (which may 
+  change depending on the document model type). Two fields valid for all 
+  document types are:
+   - `document`: contains relevant information describing this document, and
+     it has an uspecified form: it might be a metadata dictionary, or just a
+	 text string.
+   - `dataset`: a dataset context, similar to the document context but
+     describing the whole dataset this document belongs to
+
 
 #### Hierarchical source document
 
@@ -127,17 +163,66 @@ Note: the Google Drive folder contains
 
 #### Tabular source document
 
-TBD
+A Tabular document is one in which the structure has two dimensions, i.e. it is
+organized mainly as rows and columns (so it can be mapped to a table), which
+then contain some type of data. Its semantic premise is that there exists
+some kind of relationships along rows and along colums, relationships that may
+have implications in terms of PII detection and required processing
+approaches. Examples of tabular documents are Excel files, or CSV files.
 
-#### Free-form contextual source document
+One particular feature of certain tabular documents is that they can be very
+large, since they may contain huge quantities of data; hence there should be a
+way in which they can be processed by chunks (i.e. as streaming objects),
+without the need to hold all their contents at once.
 
-This is a lower-level document model in which the document is divided into independent chunks, each one with three elements:
+As all source document model types, a tabular document is considered as a
+document header, plus a sequence of document chunks.
+
+The document header corresponds to the specification in the previous section,
+with one modification in the `context` element: in addition to the already
+defined `document` and `dataset` contexts, there may also be a `column`
+context, providing specific information for each of the columns in the document
+(considered in sequential order). It could contain up to two subelements:
+* `name`: the column names, as a list of text strings
+* `description`: a description for each column, also as a list of text strings
+
+Beyond the header, each chunk contains a small dictionary with 2 or 3 elements:
+* `id`: an arbitrary string that should be unique per document. Its mission is
+  to make it easier later on to map detected PII instances to the chunk they
+  are part of
+* `table`: a 2D array holding the tabular data for this hunk, as a 2-level
+  list of first rows and, inside each row, columns. The contents of each table 
+  position (a table cell) is an arbitrary text string
+* `context`: elements that help to provide additional information to help in
+  the detection and decision process. There can be three types of context, all
+  of them optional:
+   - _global_: it will be a link/transposition of the context in the document
+     header, as described above
+   - _before_: a small section of data from the chunk preceding this one,
+     containing the closest rows to this chunk
+   - _after_: a small section of data from the chunk following this one,
+     containing the closest rows to this chunk
+
+Note that the context element of the chunk is a logical one, and need not be
+present in a static representation of the chunk, or when sent or streamed,
+since it would repeat information unnecessarily. Instead, it would be generated
+on the fly by an appropriate PII processing module, so that processing
+elements down the line have direct access to that context when processing a
+chunk, even when in streaming mode.
+
+
+
+#### Sequential source document
+
+This is a simpler document model in which the document is divided into independent chunks, each one with three elements:
 
 * **id**: an arbitrary string that should be unique per document. Its mission is to make it easier later on to map detected PII instances to the chunk they are part of
 * **text**: a text section that contains the textual contents of the chunk. It will be a string containing UTF-8 raw text. It can contain newlines or blank lines, to be considered as part of the text structure, but no formatting or layout contents (it is assumed that exact formatting & layout is lost when creating the source document for PII processing – this is a price we pay for simplicity)
-* **context**: (optional) additional UTF-8 text that contains unspecified context for this chunk (i.e. it can be the chunks immediately before or after the document, the section title, etc)
+* **context**: (optional) additional field contributing context for the chunk.
+It can contain the same three context fields as with tabular documents:
+_global_ (context defined in the document header), _before_ (previous chunk)
+and _after_ (the next chunk).
 
-The way in which the context is extracted, and therefore its semantics, is not part of the specification; processing modules must only assume that it is related somehow to the current chunk.
 
 ### PII Collection
 

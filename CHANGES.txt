@@ -1,0 +1,6 @@
+v. 0.3.0
+
+* added specification for document header
+* renamed document types into sequential, hierarchichal & tabular
+* added specification of tabular source document
+* added description of context fields
