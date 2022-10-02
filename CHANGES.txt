@@ -1,5 +1,5 @@
 v. 0.4.0
-* Reworked sourced document types and fields
+* Reworked source document types and fields
 * Added program interfaces for structural & full iterations
 
 v. 0.3.0

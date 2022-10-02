@@ -43,6 +43,19 @@ There are up to four processing blocks for such a framework:
     * _Interpretability_: Provide the capability to interpret the decision process (e.g. why a certain span was decided to be detected as PII and additional metadata on the decision)
     * _Analytics_:  provide the capability to extract and visualize aggregated statistics on decided PII and their associated parameters
 
+### Description of possible use cases
+
+This is a non-comprehensive enumeration of possible transformation use cases:
+
+* PII redaction prior to ML model training (e.g., prior to training LLMs)
+* Pseudonymization of clinical notes for secondary analysis
+* Realtime redaction of PII from system logs
+* Redact textual PII from images, forms, PDFs etc.
+* PII de-identification on semi-structured data, e.g., specific areas in a JSON file, XML, free text columns in tabular data.
+* Semi-automated PII removal (human in the loop)
+* Classify documents based on whether they contain PII
+
+
 ## Specification interfaces
 
 The main interfaces to be specified are those that act as boundaries between architecture blocks:
@@ -59,29 +72,18 @@ It might be possible to also define some interfaces internal to one block, so th
 At any given interface, we can envision three types of specification:
 
 1. A **data specification**: syntax & semantics of the data structures that will be sent through one of the interfaces
-2. A **program specification**: programmatic interfaces to let components call or be called across the interfaces. This would need to fix an initial default programming language (e.g. Python) to be able to instantiate such program interface; additional languages might be defined later
+2. A **program specification**: program interfaces to let components call or be called across the interfaces. This would need to fix an initial default programming language (e.g. Python) to be able to instantiate such program interface; additional languages might be defined later
 3. An **API specification**, as a programming language-independent way of interchanging data information across interfaces. This would use a definition such as an [OpenAPI](https://spec.openapis.org/oas/latest.html) specification so that it can be applicable regardless of the programming language; to this aim the _data specification_ would be instantiated into a JSON schema or similar
 
 Note that this is a nested structure: the _Data specification_ is the minimum required element; on top of that we can add the _Program specification_ (or a number of them, for different programming languages) and over it the _API specification_ (or we could also add the _API specification_ directly over the _Data specification_, and leave a program specification undefined)
 
-## Description of possible use cases
-
-_An enumeration of possible transformation use cases and the requirements they would impose on the architecture blocks._
-
-* PII redaction prior to ML model training (e.g., prior to training LLMs)
-* Pseudonymization of clinical notes for secondary analysis
-* Realtime redaction of PII from system logs
-* Redact textual PII from images, forms, PDFs etc.
-* PII de-identification on semi-structured data, e.g., specific areas in a JSON file, XML, free text columns in tabular data.
-* Semi-automated PII removal (human in the loop)
-* Classify documents based on whether they contain PII
 
 ## Data Specification
 
-Taking the interfaces of the Detection block as a central point, we can define:
+Taking the interfaces of the Detect block as a central point, we can define:
 
 * as _input_, a **Source Document**, either generated directly or via the
-  Preprocessing block (not that this source document is the _output_ data
+  Preprocessing block (note that this source document is the _output_ data
   specification for the Preprocessing block)
 * as _output_, a **PII collection**, containing a description of PII
   elements. A subspecification inside it is the **PII Detector**, describing a
@@ -119,10 +121,10 @@ will consider three main document model types:
 
 There might be mixed documents, which contain e.g. both tree and table sections, or other structures.
 
-The general shape of a source document is then given by a document header plus a
-set of document chunks. A chunk is intended to contain a portion of the document
-with self-contained data; the exact shape of a chunk depends on the document
-model type.
+The general shape of a source document is then given by a document metadata
+header plus a set of document chunks. A chunk is intended to contain a portion
+of the document with self-contained data; the exact shape of a chunk depends on
+the document model type.
 
 ### Document header
 
@@ -190,7 +192,7 @@ not strictly defined; it might be possible for a document to contain chunks
 spanning more than one typographical paragraph, or to split a very long
 paragraph into more than one chunk).
 
-Structural iteration for these documents is simple a linear sequence of
+Structural iteration for these documents is simply a linear sequence of
 _chunks_. Each chunk is a dictionary containing up to three elements:
 
 * **id**: an arbitrary string that should be unique per document. Its mission
@@ -306,7 +308,7 @@ documents:
 A Table Source Document is one in which the structure has two dimensions, i.e.
 it is organized mainly as rows and columns (so it can be mapped to a table),
 which then contain some type of data. Its semantic premise is that there exists
-some kind of relationships along rows and along colums, relationships that may
+some kind of relationships along rows and along columns, relationships that may
 have implications in terms of PII detection and required processing approaches.
 Examples of tabular documents are Excel files, or CSV files.
 
@@ -359,7 +361,7 @@ For Table source documents in full iteration mode:
 
 ## Storage format
 
-As a support file format, we define YAML files as the serialized representation
+As a support file format, we define YAML as the serialized representation
 of a Source Document. Those are easy to inspect visually and handle/edit
 manually, and also can be processed via automatic tools and packages. The YAML
 specification is actually somehow complex, but we would use only a subset of it:
@@ -371,7 +373,8 @@ the part strictly needed to support the definitions above
 YAML is therefore a good candidate for storage and for manual inspection or editing. For online APIs its equivalent representation as JSON might be more appropriate, though the result would be more involved, specially with the need to serialize the text chunks, including newlines and character escaping
 
 A serialized dump of a Source Document will contain then a YAML representation
-of the document. Its form will be a dictionary with three elements:
+of the document, stored in a file, database or any repositiry. Its form will
+be a dictionary with three elements:
  * `format`: a string identifier that signals the file as being a PII Source
    Document. Its value is `piisa:src-document:v1`
  * `header`: the document general metadata, as explained in [document header](#document-header)
