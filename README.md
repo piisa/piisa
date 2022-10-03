@@ -3,6 +3,9 @@
 **Table of Contents**
 
 - [piisa](#piisa)
+  - [Specification](#specification)
+  - [Who are we](#who-are-we)
+  - [Contributing](#contributing)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
