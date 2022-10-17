@@ -33,7 +33,6 @@ There are up to four processing blocks for such a framework:
       purposes, or to identify possible inconsistencies.
 	* _Auditing and explanation_: track PII decisions and be able to explain
       them.
-
     * _Anonymization_: modify the text to eliminate decided PII entities. Depending on options they can be replaced by placeholders, dummy values, generated fake PII data, etc
 
 5. **Visualize, evaluate, interpret**:
@@ -42,6 +41,12 @@ There are up to four processing blocks for such a framework:
     * _Evaluation_: provide the capability to assess the performance of detection and/or decision, possibly by using a ground truth evaluation dataset, and estimate precision values.
     * _Interpretability_: Provide the capability to interpret the decision process (e.g. why a certain span was decided to be detected as PII and additional metadata on the decision)
     * _Analytics_:  provide the capability to extract and visualize aggregated statistics on decided PII and their associated parameters
+
+Note that the full process of performing *PII recognition* on documents could
+be considered as the combination of the steps *Detect* + *Decide*
+ * *Detection* is the first phase, in which matches are done
+ * *Decision* is the second phase that consolidates all detected PII instances
+
 
 ### Description of possible use cases
 
