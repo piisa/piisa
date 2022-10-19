@@ -11,11 +11,39 @@
 
 # piisa
 
-PIISA stands for a *Personal Identifiable Information Standard*. This standard allows seamless interoperability between various PII detection frameworks.
+PIISA stands for a *Personal Identifiable Information Standard*. This standard
+allows seamless interoperability between various PII detection frameworks.
+
+
+## Rationale
+
+Our mission statement stems from these facts:
+ * Proper PII management is hard, and has many facets.
+ * There are solutions available for PII processing, both open source and
+   commercial
+ * We might want to _combine_ several solutions to achieve better results, or
+   to adapt to specific use cases
+ * However there is no practical way of achieving such combination, or of
+   customizing solutions
+
+Our approach has been _let's define an architecture that decomposes the PII
+problem into blocks, and let's define interfaces between those blocks_
+
+Therefore the PIISA specification, and its reference implementation, tries to
+follow the approach of _independent components that pass data between them to
+compose a full solution_
+
 
 ## Specification
 
 [Click here for the latest specification document](docs/specs.md).
+
+
+## Usage
+
+We are developing a reference software of this specification, delivered as a
+set of Python packages that implement each block in the architecture.
+
 
 ## Who are we
 
@@ -31,6 +59,7 @@ We are a team of privacy enthusiasts who are interested in improving PII managem
   - [@shamikbose](https://github.com/shamikbose)
   - [@ianyu93](https://github.com/ianyu93)
 
+
 ## Contributing
 
 We are happy to accept contributions from anyone interested in shaping out PIISA. 
@@ -44,3 +73,10 @@ To contribute:
 -  Run all tests locally before publishing your pull request.
 -  Push your changes to a topic branch in your fork of the repository.
 -  Submit a pull request to the repository.
+
+## License
+* The PIISA specification is licensed under a [Creative Commons
+Attribution-NoDerivatives 4.0 International License].
+* The PIISA reference implementation is licensed under an Apache license
+
+[Creative Commons Attribution-NoDerivatives 4.0 International License]: http://creativecommons.org/licenses/by-nd/4.0/

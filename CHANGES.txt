@@ -1,6 +1,7 @@
 v. 0.4.0
 * Reworked source document types and fields
 * Added program interfaces for structural & full iterations
+* LICENSE changed to cc-by-nd-4.0
 
 v. 0.3.0
 
