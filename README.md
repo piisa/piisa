@@ -3,9 +3,12 @@
 **Table of Contents**
 
 - [piisa](#piisa)
+  - [Rationale](#rationale)
   - [Specification](#specification)
+  - [Usage](#usage)
   - [Who are we](#who-are-we)
   - [Contributing](#contributing)
+  - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
