@@ -3,19 +3,17 @@
 **Table of Contents**
 
 - [piisa](#piisa)
-  - [Rationale](#rationale)
   - [Specification](#specification)
-  - [Usage](#usage)
   - [Who are we](#who-are-we)
   - [Contributing](#contributing)
-  - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # piisa
 
-PIISA stands for a *Personal Identifiable Information Standard*. This standard
-allows seamless interoperability between various PII detection frameworks.
+PIISA stands for a *Personal Identifiable Information Standard Architecture*.
+This standard is designed to allow seamless interoperability between various
+PII processing frameworks.
 
 
 ## Rationale
@@ -41,11 +39,12 @@ compose a full solution_
 
 [Click here for the latest specification document](docs/specs.md).
 
-
 ## Usage
 
 We are developing a reference software of this specification, delivered as a
-set of Python packages that implement each block in the architecture.
+set of Python packages that implement each block in the architecture. Check a
+[description of those packages] and an introductory [usage document] to find
+out how it has been structured and how to use it.
 
 
 ## Who are we
@@ -61,7 +60,6 @@ We are a team of privacy enthusiasts who are interested in improving PII managem
   - [@edugp](https://github.com/edugp)
   - [@shamikbose](https://github.com/shamikbose)
   - [@ianyu93](https://github.com/ianyu93)
-
 
 ## Contributing
 
@@ -79,7 +77,9 @@ To contribute:
 
 ## License
 * The PIISA specification is licensed under a [Creative Commons
-Attribution-NoDerivatives 4.0 International License].
+  Attribution-NoDerivatives 4.0 International License].
 * The PIISA reference implementation is licensed under an Apache license
 
 [Creative Commons Attribution-NoDerivatives 4.0 International License]: http://creativecommons.org/licenses/by-nd/4.0/
+[description of those packages]: docs/libraries.md
+[usage document]: docs/usage.md
