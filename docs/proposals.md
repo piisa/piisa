@@ -3,6 +3,8 @@
 These are ongoing conversations, which may or may not translate into future
 revisions of the specification:
 
+## Improvements
+
 * There is the concept of Table layout which is 2D, where the "adjacent"
   paragraphs are actually in 2 dimensions. In hypertext, adjacent documents
   might be a graph. But this type of information is probably in a context of
@@ -41,3 +43,10 @@ revisions of the specification:
 * It should be noted that the actual location of the serialization of the YAML
   data doesn't have to be a "file". It could be a database, or any datastore
   for storing the data securely and for later retrieval.
+
+
+## Fixes
+
+* change the elements in the document header to be clearer:
+   - `document` to `document-metadata` or similar
+   - `collection` to `collection-metadata`

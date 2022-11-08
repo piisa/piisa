@@ -1,6 +1,6 @@
 # PII data specification
 
-## Version 0.4.0
+## Version 0.4.1
 
 <!-- START doctoc -->
 <!-- END doctoc -->
@@ -20,7 +20,7 @@ There are up to four processing blocks for such a framework:
     * **component information**: the set of available PII Detectors that can be used (assuming we take a modular approach, there might be a database of “pluggable modules” we can use for PII detection). Each Detector will define the type and parameters of PII that can detect.
 3. **Decide**: block that takes a number of PII candidates, as produced by the Detection block, and consolidates that information, producing as final result the set of PII elements in the text that need to be addressed. In the process it might combine PII candidates, choose among overlapping PII candidates, reject others, etc. This block uses as input:
     * Candidate list: A list of detected PII candidates
-    * Configuration information, as provided by the Decision block (language, countries, etc)
+    * Configuration information, as provided by the Decide block (language, countries, etc)
     * An optional purpose/application scenario, to guide the decisions
     * _Context information, as defined in its own configuration. This might include: requirements on PII specificity, sensitivity and scarcity, applicable regulations, etc_
 4. **Transform**: This is the block that takes the decided PII entities, and acts upon them, depending on the intended purpose. There can be different Transformation blocks, all of them sharing the same interface but providing different outcomes. Some examples are:
@@ -69,7 +69,7 @@ The main interfaces to be specified are those that act as boundaries between arc
 * interface between detection and decision
 * interface between decision and transformation
 
-It might be possible to also define some interfaces internal to one block, so that the block can be decomposed into modular elements (e.g. for pluggable detectors inside the Decision block)
+It might be possible to also define some interfaces internal to one block, so that the block can be decomposed into modular elements (e.g. for pluggable detectors inside the Decide block)
 
 
 ## Specification types
@@ -94,16 +94,16 @@ Taking the interfaces of the Detect block as a central point, we can define:
   elements. A subspecification inside it is the **PII Detector**, describing a
   block _producing_ PII elements.
 
+The Preprocess block defines its output data specification (as a Source
+Document), but its input data specification is not standardized, and will
+depend on the available modules and their capabilities to process document
+formats.
+
 The Decision block uses the PII Collection data specification as both input
 and output (with an enlarged data specification in output, incorporating
 additional information resulting from the decision). Then the Transform block
 uses both a PII collection and a Source Document as input; its output depends
 on the transformation done.
-
-The Preprocess block defines its output data specification (as a Source
-Document), but its input data specification is not standardized, and will
-depend on the available modules and their capabilities to process document
-formats.
 
 
 ## Source document
