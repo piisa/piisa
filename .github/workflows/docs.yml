@@ -19,4 +19,3 @@ jobs:
           CUSTOM_DOMAIN: piisa.org
           CONFIG_FILE: mkdocs.yml
           EXTRA_PACKAGES: build-base
-          REQUIREMENTS: docs/requirements.txt
