@@ -8,3 +8,8 @@ nav:
   - Proposals: proposals.md
   - Specifications: specs.md
   - Usage: usage.md
+  
+extra: 
+  social: 
+  - icon: fontawesome/brands/github 
+    link: https://github.com/piisa/piisa
