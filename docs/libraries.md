@@ -2,6 +2,7 @@
 
 Our reference implementation for the [PIISA specification] has been developed
 as a set of Python packages:
+
  * [pii-data] is the foundational library, containing base data structures. It
    defines our abstraction for a document to be analyzed (Source Document) and
    the elements defining a PII instance.
@@ -14,19 +15,24 @@ as a set of Python packages:
    Documents. However, it does not implement any PII Detector itself, delegating
    that task to external libraries (attached via plugins or configuration files)
  * [pii-extract-plg-regex] is a pii-extract plugin that implements some PII
-   Detectors for a number of tasks and languages, based on regular expressions.
- * [pii-decision] (will) implement the _Decision_ block
+   Detectors for a number of tasks and languages, based on regular expressions
+   (plus optional context validation and/or checksums)
+ * [pii-extract-plg-presidio] is a pii-extract plugin that implements some PII
+   Detectors by calling the [Microsoft Presidio] library.
+ * pii-decide (will) implement the _Decision_ block
  * [pii-transform] implements the PII _Transform_ block of the architecture:
    it takes a PII Collection created by pii-extract (and confirmed by 
-   pii-decision), and replaces/modifies the PII strings in the original Source
+   pii-decide), and replaces/modifies the PII strings in the original Source
    Document
 
 For a brief initial tutorial for the packages, check out the [usage document].
+
 
 ## Source Document
 
 The abstraction we use to manage original data to be processed is called
 [Source Document]. It is a simple representation of a document that contains
+
  * a document header, containing some document-level metadata
  * a list of document _chunks_, each one containing a text block extracted
    from the document, plus some additional metadata
@@ -40,6 +46,9 @@ some particular document structures: _sequence_, _tree_, _table_
 [pii-preprocess]: https://github.com/piisa/pii-preprocess
 [pii-extract-base]: https://github.com/piisa/pii-extract-base
 [pii-extract-plg-regex]: https://github.com/piisa/pii-extract-plg-regex
+[pii-extract-plg-presidio]: https://github.com/piisa/pii-extract-plg-presidio
 [pii-transform]: https://github.com/piisa/pii-transform
+[pii-decide]: https://github.com/piisa/pii-decide
 [source document]: https://github.com/piisa/pii-data/doc/srcdocument.md
 [usage document]: usage.md
+[Microsoft Presidio]: https://microsoft.github.io/presidio/

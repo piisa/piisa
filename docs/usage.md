@@ -8,13 +8,18 @@ we have an active Python virtualenv (3.8 or later), it would be:
 
 ```
 pip install wheel
-pip install pii-preprocess pii-extract-plg-regex pii-transform
+pip install pii-preprocess pii-extract-plg-regex pii-extract-plg-presidio pii-transform
+python -m spacy download en_core_web_lg
+```
 
+and then execute
 
+```
 pii-process <input-document> <output-document.yml> --lang en --default-policy label
 ```
 
 ... where:
+
  * `<input-document>` is a text, Word o CSV file (the ones currently 
    supported by pii-preprocess), or a YAML dump of an already-parsed document
  * `<output-document.yml>` is a YAML representation of the document with
@@ -29,6 +34,7 @@ pii-process <input-document> <output-document.yml> --lang en --default-policy la
    policies
    
 Additionally:
+
  * Output document can also be a JSON or text file (just change the file
    extension), or a _compressed_ file (e.g. use a `name.yml.gz` filename).
  * The argument `--save-pii <output>` will save in a JSON file the extracted
@@ -41,15 +47,23 @@ Additionally:
 
 ## Full process
 
+The whole workflow is structured around a set of [Python libraries], which
+coordinate to perform the whole process. Here we comment some of the stages.
+
 ### Detect
 
-* The minimum package installation requirement is `pii-extract-base` (which
-  will also install `pii-data`). 
-* However this package does not contain any detectors. Installing
-  `pii-extract-plg-regex` will add a plugin that includes some regex-based
-  detectors for PII instances in several languages/countries.
+* The minimum package installation requirement for PII detection is 
+  `pii-extract-base` (which will also install `pii-data`). 
+* However this package does not contain any detectors. Installing a plugin
+  will include detectors. Two plugins are available:
+    - `pii-extract-plg-regex` will add [a plugin that includes some
+	  regex-based detectors] for PII instances in several languages/countries.
+    - `pii-extract-plg-presidio` will add [a plugin that uses Microsoft
+	  Presidio] to perform PII instance dectection. Note that Presidio needs
+	  an NLP engine for its model-based recognizers (the default is to use
+	  spaCy)
 
-This detection package installs a `pii-detect` command-line script. The
+The base detection package installs a `pii-detect` command-line script. The
 script can *only* process documents in serialized SourceDocument format (a
 YAML o JSON format containing the document split in chunks). It will output
 a PiiCollection: a JSON file containing all PII instances detected.
@@ -71,12 +85,36 @@ how to split the document in chunks), Microsoft Word files and CSV
 files. Future packages, or plugins, will add more formats.
 
 
-#### Transform
+### Transform
 
 The `pii-transform` package can read a PiiCollection and use it to _modify_
 a SourceDocument, replacing PII occurrences with a different string,
 according to a set of possible substitution policies.
 
-It also provides a `pii-process` command-line script that works as a combined
-processing pipeline, including preprocessing, detection and PII transformation
-in a single execution. This is the one shown in the above end-to-end section.
+Thos package provides also a `pii-process` wrapper command-line script that
+works as a combined processing pipeline, including preprocessing, detection and
+PII transformation in a single execution. This is the one shown in the above
+end-to-end section.
+
+
+## Programmatic API
+
+In addition to command-line operation, the packages also provide a Python API
+that can be used to integrate processing into other workflows. Some examples
+are:
+
+ * the `pii-preprocess` package contains a [DocumentLoader] class to read
+   files and convert them to [Source Documents]
+ * the `pii-extract-base` package contains a [Python API for PII Detection],
+   at various level of detail.
+ * the `pii-transform` package contains the code for the [pii-process
+   script], which can be used as an example of end-to-end processing
+
+
+[a plugin that includes some regex-based detectors]: https://github.com/piisa/pii-extract-plg-regex
+[a plugin that uses Microsoft Presidio]: https://github.com/piisa/pii-extract-plg-presidio
+[Python libraries]: libraries.md
+[DocumentLoader]: https://github.com/piisa/pii-preprocess/tree/main/doc/loader.md
+[Source Documents]: libraries.md#source-document
+[Python API for PII Detection]: https://github.com/piisa/pii-extract-base/tree/main/doc/usage.md
+[pii-process script]: https://github.com/piisa/pii-transform/tree/main/blob/main/src/pii_transform/app/process.py
