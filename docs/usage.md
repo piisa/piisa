@@ -107,8 +107,9 @@ are:
    files and convert them to [Source Documents]
  * the `pii-extract-base` package contains a [Python API for PII Detection],
    at various level of detail.
- * the `pii-transform` package contains the code for the [pii-process
-   script], which can be used as an example of end-to-end processing
+ * the `pii-transform` package contains (check its [api document])
+     - an API for PII transformation
+     - wrapper APIs for end-to-end processing
 
 
 [a plugin that includes some regex-based detectors]: https://github.com/piisa/pii-extract-plg-regex
@@ -117,4 +118,4 @@ are:
 [DocumentLoader]: https://github.com/piisa/pii-preprocess/tree/main/doc/loader.md
 [Source Documents]: libraries.md#source-document
 [Python API for PII Detection]: https://github.com/piisa/pii-extract-base/tree/main/doc/usage.md
-[pii-process script]: https://github.com/piisa/pii-transform/tree/main/blob/main/src/pii_transform/app/process.py
+[api document]: https://github.com/piisa/pii-transform/tree/main/doc/api.md
