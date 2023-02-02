@@ -22,6 +22,7 @@ PII processing frameworks.
 ## Rationale
 
 Our mission statement stems from these facts:
+
  * Proper PII management is hard, and has many facets.
  * There are solutions available for PII processing, both open source and
    commercial
@@ -52,7 +53,9 @@ out how it has been structured and how to use it.
 
 ## Who are we
 
-We are a team of privacy enthusiasts who are interested in improving PII management across multiple domains. 
+We are a team of privacy enthusiasts who are interested in improving PII
+management across multiple domains.
+
 - [Read our blog posts](https://privacyprotection.substack.com/).
 - Current contributors to this codebase:
   - [@paulovn](https://github.com/paulovn)
@@ -68,6 +71,7 @@ We are a team of privacy enthusiasts who are interested in improving PII managem
 
 We are happy to accept contributions from anyone interested in shaping out PIISA. 
 To contribute:
+
 -  Make sure you have a [GitHub account](https://github.com/signup/free).
 -  Check if a [Github issue](https://github.com/piisa/piisa/issues) already exists. If not, create one.
 -  Clearly describe the issue.
@@ -79,6 +83,7 @@ To contribute:
 -  Submit a pull request to the repository.
 
 ## License
+
 * The PIISA specification is licensed under a [Creative Commons
   Attribution-NoDerivatives 4.0 International License].
 * The PIISA reference implementation is licensed under an Apache license

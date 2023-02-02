@@ -49,6 +49,6 @@ some particular document structures: _sequence_, _tree_, _table_
 [pii-extract-plg-presidio]: https://github.com/piisa/pii-extract-plg-presidio
 [pii-transform]: https://github.com/piisa/pii-transform
 [pii-decide]: https://github.com/piisa/pii-decide
-[source document]: https://github.com/piisa/pii-data/doc/srcdocument.md
+[source document]: https://github.com/piisa/pii-data/tree/main/doc/srcdocument.md
 [usage document]: usage.md
 [Microsoft Presidio]: https://microsoft.github.io/presidio/
