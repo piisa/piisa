@@ -56,16 +56,16 @@ configuration section with the same `format` tag; they will be combined (later
 fields with the same name will override/update previous fields).
 
 
-```
+```JSON
  {
    "format": "piisa:config:full:v1",
    "config": [
      {
-	   "format": "piisa:config:<module1>:<name1>:v1",
+       "format": "piisa:config:<module1>:<name1>:v1",
        ...config for module1/name1
      },
 	 {
-	   "format": "piisa:config:<module1>:<name2>:v1",
+       "format": "piisa:config:<module1>:<name2>:v1",
        ...config for module1/name2
      },
 	 {
@@ -84,8 +84,8 @@ Some examples of installed default configuration files are:
 * The [loader.json] file in the `pii-preprocess` package maps file extensions
   to file types, and for each type defines a loader to read that document type
 * A [placeholder.json] file in the `pii-transform` package defines the dummy
-  values to substitute
-* The `pii-extract-plg-presidio` plugin contains a configuration file to map
+  substitution values for the _placeholder_ policy.
+* The [pii-extract-plg-presidio] plugin contains a configuration file to map
   Presidio entities to PIISA entities
 
 
@@ -100,3 +100,4 @@ Additionally other aspects of the processing flow can be also modified:
 [loader.json]: https://github.com/piisa/pii-preprocess/blob/main/src/pii_preprocess/resources/doc-loader.json
 [placeholder.json]: https://github.com/piisa/pii-transform/blob/main/src/pii_transform/resources/placeholder.json
 [tasks.json]: https://github.com/piisa/pii-extract-base/blob/main/test/data/tasklist-example.json
+[pii-extract-plg-presidio]: https://github.com/piisa/pii-extract-plg-presidio/blob/main/src/pii_extract_plg_presidio/resources/plugin-config.json

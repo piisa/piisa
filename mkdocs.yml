@@ -4,10 +4,10 @@ theme:
 
 nav:
   - Home: index.md
-  - Libraries: libraries.md
-  - Proposals: proposals.md
-  - Specifications: specs.md
+  - Specification: specs.md
   - Usage: usage.md
+  - Libraries: libraries.md
+  - Configuration: configuration.md
   
 extra: 
   social: 
