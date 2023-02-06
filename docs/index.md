@@ -1,8 +1,8 @@
 ## 1. What is PIISA?
 
-PIISA stands for a *Personal Identifiable Information Standard Architecture*.
-This standard is designed to allow seamless interoperability between various
-PII processing frameworks.
+PIISA stands for a *Personally Identifiable Information Standard Architecture*.
+This open source and interoperableframework creates a standard designed to allow seamless interoperability between various
+PII processing frameworks. 
 
 
 ## 2. Rationale
