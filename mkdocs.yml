@@ -13,3 +13,6 @@ extra:
   social: 
   - icon: fontawesome/brands/github 
     link: https://github.com/piisa/piisa
+
+markdown_extensions:
+  - footnotes
