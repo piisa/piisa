@@ -1,9 +1,9 @@
-# Proposed future enhancements/modifications to the standard
+## 1. Proposed future enhancements/modifications to the standard
 
 These are ongoing conversations, which may or may not translate into future
 revisions of the specification:
 
-## Improvements
+## 2. Improvements
 
 * There is the concept of Table layout which is 2D, where the "adjacent"
   paragraphs are actually in 2 dimensions. In hypertext, adjacent documents
@@ -45,7 +45,7 @@ revisions of the specification:
   for storing the data securely and for later retrieval.
 
 
-## Fixes
+## 3. Fixes
 
 * change the elements in the document header to be clearer:
    - `document` to `document-metadata` or similar
