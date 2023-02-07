@@ -1,11 +1,9 @@
-# PII data specification
-
-## Version 0.4.1
+## 1. Version 0.4.1
 
 <!-- START doctoc -->
 <!-- END doctoc -->
 
-## Overall architecture
+## 2. Overall architecture
 
 The general structure of a framework dealing with PII management could be visualized as the following diagram:
 
@@ -17,7 +15,7 @@ There are up to four processing blocks for such a framework:
 2. **Detect**: block in charge of processing input data (usually in text format) and performing detection of candidates to be assigned as PII data. This block uses as input:
     * **source document:** we will consider a normalized data format that conveys the raw text contents, together with some structural information. (which can provide useful hints to the PII Detection modules about the relations between text chunks)
     * **configuration information**: specification of contextual elements affecting detection (e.g. text language, applicable countries, etc)
-    * **component information**: the set of available PII Detectors that can be used (assuming we take a modular approach, there might be a database of “pluggable modules” we can use for PII detection). Each Detector will define the type and parameters of PII that can detect.
+    * **component information**: the set of available PII Detectors that can be used (assuming we take a modular approach, there might be a database of "pluggable modules" we can use for PII detection). Each Detector will define the type and parameters of PII that can detect.
 3. **Decide**: block that takes a number of PII candidates, as produced by the Detection block, and consolidates that information, producing as final result the set of PII elements in the text that need to be addressed. In the process it might combine PII candidates, choose among overlapping PII candidates, reject others, etc. This block uses as input:
     * Candidate list: A list of detected PII candidates
     * Configuration information, as provided by the Decide block (language, countries, etc)
@@ -44,11 +42,12 @@ There are up to four processing blocks for such a framework:
 
 Note that the full process of performing *PII recognition* on documents could
 be considered as the combination of the steps *Detect* + *Decide*
+
  * *Detection* is the first phase, in which matches are done
  * *Decision* is the second phase that consolidates all detected PII instances
 
 
-### Description of possible use cases
+### 2.1. Description of possible use cases
 
 This is a non-comprehensive enumeration of possible transformation use cases:
 
@@ -61,7 +60,7 @@ This is a non-comprehensive enumeration of possible transformation use cases:
 * Classify documents based on whether they contain PII
 
 
-## Specification interfaces
+## 3. Specification interfaces
 
 The main interfaces to be specified are those that act as boundaries between architecture blocks:
 
@@ -72,7 +71,7 @@ The main interfaces to be specified are those that act as boundaries between arc
 It might be possible to also define some interfaces internal to one block, so that the block can be decomposed into modular elements (e.g. for pluggable detectors inside the Decide block)
 
 
-## Specification types
+## 4. Specification types
 
 At any given interface, we can envision three types of specification:
 
@@ -83,7 +82,7 @@ At any given interface, we can envision three types of specification:
 Note that this is a nested structure: the _Data specification_ is the minimum required element; on top of that we can add the _Program specification_ (or a number of them, for different programming languages) and over it the _API specification_ (or we could also add the _API specification_ directly over the _Data specification_, and leave a program specification undefined)
 
 
-## Data Specification
+## 5. Data Specification
 
 Taking the interfaces of the Detect block as a central point, we can define:
 
@@ -106,14 +105,14 @@ uses both a PII collection and a Source Document as input; its output depends
 on the transformation done.
 
 
-## Source document
+## 6. Source document
 
 We need to balance two conflicting requirements:
 
 1. an easy format to work with: it needs to be machine-processable but also amenable to human editing and reading
 2. an expressive format: able to reflect (at least to some level) the document structure, since that structure might be important to connect PII elements
 
-There are quite sophisticated “Layout” formats for text documents: Word documents (Office Open XML aka OOXML), PDF files, RTF, ODF (Open Document), etc. They are very complex, with specifications compressing many pages, since they allow the complete and precise specification of all aspects of document layout, structure and presentation. They would, of course, offer the greatest nuance in determining the relationships between the text chunks they contain[^1], but would be too difficult to handle for our purpose of consolidating a data interchange format for PII processing that has “reasonable” complexity. There are also image documents (PDF, PNG, JPEG, …), with non-textual PII like people's faces, fingerprints, medical scans or signatures, which we do not consider at all at this point.
+There are quite sophisticated "Layout" formats for text documents: Word documents (Office Open XML aka OOXML), PDF files, RTF, ODF (Open Document), etc. They are very complex, with specifications compressing many pages, since they allow the complete and precise specification of all aspects of document layout, structure and presentation. They would, of course, offer the greatest nuance in determining the relationships between the text chunks they contain[^1], but would be too difficult to handle for our purpose of consolidating a data interchange format for PII processing that has "reasonable" complexity. There are also image documents (PDF, PNG, JPEG, …), with non-textual PII like people's faces, fingerprints, medical scans or signatures, which we do not consider at all at this point.
 
 Instead, we are aiming at a simpler solution. As a very minimum, a document
 can be considered as _a collection of text chunks_. How those chunks are
@@ -131,12 +130,13 @@ header plus a set of document chunks. A chunk is intended to contain a portion
 of the document with self-contained data; the exact shape of a chunk depends on
 the document model type.
 
-### Document header
+### 6.1. Document header
 
 The document header contains metadata applicable to the full document. It is
 divided into sections, each one containing dictionary-like metadata.
 
 The following sections are defined:
+
  * `document`: contains relevant information (metadata) describing this
    particular document; a non-exahustive list of possible fields (all of them
    optional except `id`) is:
@@ -162,11 +162,12 @@ The following sections are defined:
 Additional sections may be defined for specific document types.
 
 
-## Iteration interfaces for source documents
+## 7. Iteration interfaces for source documents
 
 Once the Source Document has been specified, we can define program interfaces
 to _iterate_ over a document, producing document chunks. Two different iteration
 interfaces have been defined for this data structure:
+
  * **structural iteration**: this is the native iteration for the document,
    which produces elements revealing its intrinsic data structure (therefore the
    objects delivered in the iteration may differ across document types,
@@ -177,6 +178,7 @@ interfaces have been defined for this data structure:
 
 An additional difference between the two iteration modes appears in the 
 content of the contextual information delivered within each chunk:
+
  * In structural iteration, the context fields for a chunk will not contain any
    information regarding the rest of the document (since the structure is
    already given by the iteration), only semantic information inherent to the
@@ -187,9 +189,9 @@ content of the contextual information delivered within each chunk:
 The following sections detail these iteration interfaces for each document type.
 
 
-### Sequence documents
+### 7.1. Sequence documents
 
-#### Structural iteration
+#### 7.1.1. Structural iteration
 
 A sequence document is divided into independent, adjacent chunks. Each chunk
 could be conceptually considered as one document paragraph (though that split is
@@ -222,7 +224,7 @@ application-dependent. And in any case joining together the data elements
 in all chunks should recover a text representation of the original document.
 
 
-#### Full iteration
+#### 7.1.2. Full iteration
 
 The full iteration for sequence documents is quite similar to the structural
 iteration (given that the document structure is flat). It produces a series of
@@ -230,7 +232,9 @@ chunks, each one of them having up to three elements:
 
 * **id**: a unique string for the chunk (there is no guarantee that is the same
   as the id in structural iteration)
+
 * **data**: the same contents as in the **data** field in structural iteration
+
 * **context**: an optional element that, when present, contains a dictionary
   with the same fields as in structural iteration, **plus** up to three types
   of context structure, all of them optional:
@@ -252,16 +256,16 @@ elements down the line have direct access to that context when processing a
 chunk, even when in streaming mode.
 
 
-### Tree documents
+### 7.2. Tree documents
 
 In this document type we are trying to preserve two main structural relations between text chunks:
 
-1. an “_is-contained-in_” relation: a text chunk can be considered as semantically contained within another chunk
-2. an “_is-next-to_” relation: a text chunk has a relation of being after or before another text chunk
+1. an "_is-contained-in_" relation: a text chunk can be considered as semantically contained within another chunk
+2. an "_is-next-to_" relation: a text chunk has a relation of being after or before another text chunk
 
 These two relationships can be nested and combined at will. They alone can be enough to describe many of the links that we could need to establish between text chunks (not all of them, but hopefully enough for PII determination).
 
-#### Structural iteration
+#### 7.2.1. Structural iteration
 
 * A document is considered as a sequence of _subtrees_
 * The tree is split by first-level branches (chapters/sections); each element
@@ -274,6 +278,7 @@ These two relationships can be nested and combined at will. They alone can be en
   as a nested dictionary)
 
 When iterating, then:
+
 * A document produces a sequence of chunks
 * Each chunk contains a small dictionary with 2 to 4 elements:
     1. **id**: an arbitrary string that should be unique per document (same as
@@ -284,16 +289,17 @@ When iterating, then:
 	   may contain document-specific context fields for the chunk
 	4. **chunks**: (optional) if the current chunk contains subchunks below in the hierarchy, this element contains a sequence of them. This can be nested as needed.
 
-A chunk position in the document hierarchy (its “level”, with 1 being a top-level chunk) could be deduced unambiguously from its location in the nested sequence of chunks.
+A chunk position in the document hierarchy (its "level", with 1 being a top-level chunk) could be deduced unambiguously from its location in the nested sequence of chunks.
 
-Note that there is some inherent ambiguity when constructing a document with this model: for the same document, the decision on whether two blocks should be considered “next-to” or “included-in” is not always univocal, and in some cases the content of the text blocks is what gives the semantics away. It is hoped that these variants should not affect the result of any PII Detector processors significantly.
+Note that there is some inherent ambiguity when constructing a document with this model: for the same document, the decision on whether two blocks should be considered "next-to" or "included-in" is not always univocal, and in some cases the content of the text blocks is what gives the semantics away. It is hoped that these variants should not affect the result of any PII Detector processors significantly.
 
 This specification would be enough to roughly translate the overall structure of a Word document, a Web Page or a PDF file, assuming that structure can be mapped into this simple hierarchy (some documents are of course more complex than that). Also, a simple raw text document can be easily modeled as a single top-level text chunk.
 
-#### Full iteration
+#### 7.2.2. Full iteration
 
 The full iteration has similar mechanics as the full iteration in sequence
 documents:
+
  * The document tree is traversed depth-first, and all data elements available
    when traversing generate a chunk
  * Iteration then produces a linear sequence of these chunks
@@ -308,7 +314,7 @@ documents:
    tree, or in adjacent subtrees
 
 
-### Table documents
+### 7.3. Table documents
 
 A Table Source Document is one in which the structure has two dimensions, i.e.
 it is organized mainly as rows and columns (so it can be mapped to a table),
@@ -330,11 +336,12 @@ modification: in addition to the already defined `document` and `dataset`
 sections, there may also be a `column` section, providing specific information
 for each of the columns in the document (considered in sequential order). It
 could contain up to two subelements:
+
 * `name`: the column names, as a list of text strings
 * `description`: a description for each column, also as a list of text strings
 
 
-#### Structural iteration
+#### 7.3.1. Structural iteration
 
 * A document is considered as a sequence of _rows_
 * Each row contains a list of column values, each column value is a string with
@@ -348,9 +355,10 @@ could contain up to two subelements:
   `data` field can also be iterated upon.
 
 
-#### Full iteration
+#### 7.3.2. Full iteration
 
 For Table source documents in full iteration mode:
+
  * A document is considered as a sequence of _cells_
  * Cells are traversed in row-major order, top-to-bottom and left-to-right
  * Traversing produces a linear list of document chunks
@@ -364,13 +372,14 @@ For Table source documents in full iteration mode:
    which for the first/last cells in a row will be in another row
 
 
-## Storage format
+## 8. Storage format
 
 As a support file format, we define YAML as the serialized representation
 of a Source Document. Those are easy to inspect visually and handle/edit
 manually, and also can be processed via automatic tools and packages. The YAML
 specification is actually somehow complex, but we would use only a subset of it:
 the part strictly needed to support the definitions above
+
  * sequences, for the sequences of chunks
  * mappings, for each chunk
  * literal block scalars, to hold the text contents of each chunk
@@ -380,6 +389,7 @@ YAML is therefore a good candidate for storage and for manual inspection or edit
 A serialized dump of a Source Document will contain then a YAML representation
 of the document, stored in a file, database or any repositiry. Its form will
 be a dictionary with three elements:
+
  * `format`: a string identifier that signals the file as being a PII Source
    Document. Its value is `piisa:src-document:v1`
  * `header`: the document general metadata, as explained in [document header](#document-header)
@@ -387,6 +397,7 @@ be a dictionary with three elements:
    the document
 
 The use of structural iteration allows:
+
  - the preservation of the document structure, which then can be regenerated
    when the document is read from the file
  - space savings by not including the context fields present only in the full
@@ -396,16 +407,17 @@ Note that context fields that are present in the structural iteration will _be_
 dumped into the file.
 
 The PIISA repository contains:
+
 * [an example](https://github.com/piisa/pii-data/blob/main/test/data/doc-example.yaml) of such a Source Document.
 * a [Python module](https://github.com/piisa/pii-data) developed to read &
 write this format, as well as produce structural & full iterators from it.
 
 
-## PII Collection
+## 9. PII Collection
 
 A PII collection is the result of running a set of PII detectors on a source document. This result takes the form of a header + a list of detected PII instances.
 
-### Header
+### 9.1. Header
 
 The header contains generic metadata that affects all the PII instances in the collection. Elements of this metadata are:
 
@@ -418,13 +430,13 @@ The header contains generic metadata that affects all the PII instances in the c
   - `url`: an address used as reference for the package (e.g. a website or a GitHub repository)
   - `method`: an optional string defining the process used for detection, e.g. `Regex`, `NerModel`, `Regex+Context`, `Checksum`, etc
 
-### PII instance
+### 9.2. PII instance
 
 A PII instance describes one recognized PII entity. It can be considered as a dictionary containing three types of information:
 
 * PII Description: set of fields characterizing the instance
   - `type`: a string denoting the broad class of PII this instance belongs to. Typically a set of PII types will be predefined so that it can be shared across systems.
-  - `subtype`: certain PII classes may have optional subtypes, which help qualify its meaning. For instance, the `GOV_ID` type might have as subtypes “driving license”, “passport number”, etc
+  - `subtype`: certain PII classes may have optional subtypes, which help qualify its meaning. For instance, the `GOV_ID` type might have as subtypes "driving license", "passport number", etc
   - `value`: the text string from the document containing the PII Instance, as extracted by the detector
   - `lang`: the ISO 639-1 code of the language the document chunk (and possibly the PII instance) is in
   - `country`: the ISO 3166-1 code of the country that is relevant for the PII Instance, if any. E.g. a `CREDIT_CARD` number PII may have an associated country, while a `BITCOIN_ADDRESS` PII has not.
@@ -437,7 +449,7 @@ A PII instance describes one recognized PII entity. It can be considered as a di
   - `detectorid`: the identifier for the detector that produced this PII instance, using the key defined in the Collection header
   - `score`: an optional floating point number between 0.0 and 1.0 that gives a measure of the confidence of the Detector on this PII instance. Each detector has its own way of assessing such confidence, so scores are not necessarily comparable across detectors.
 
-### File format
+### 9.3. File format
 
 When formatting a PII Collection for storage or transmission, any format capable of preserving its structure can be used. For the ease of compatibility with most REST-type interfaces, two formats can be proposed:
 
@@ -452,7 +464,7 @@ Two examples of the format are:
 
 * Full format:
 
-  ```
+```
   {
     "metadata": {
       "date": "2022-05-18T15:00:01+00",
@@ -504,20 +516,20 @@ Two examples of the format are:
       }
     }
   }
-  ```
+```
 
 * Streaming format:
 
   (note that this example shows additional newlines not present in the file itself)
 
-  ```
+```
   {"date":"2022-05-18T15:00:01+00","format":"pii:pii-collection:c1","detectors":{"01":{"name":"pii-manager","version":"0.6.0","source": "PIISA", "url":"https://github.com/piisa"},"02":{"name":"presidio","version": "1.2.2","source":"Microsoft","url":"https://microsoft.github.io/presidio/"}}}
   {"type":"CREDIT_CARD","value":"4273966645815642","lang":"en","chunkid":"36","pos":25,"detectorid":"01","score":1.0}
   {"type":"GOV_ID","subtype":"SSN","value":"536-90-4399","lang":"en","country":"us","chunkid":"12","pos":102",detectorid":"02"}
   {"type":"GOV_ID","subtype":"NIF","value":"34657934-Q","lang":"es","country":"es","chunkid":"1","pos":10",detectorid":"02"}
+```
 
-  ```
+## 10. Notes
 
-## Notes
-
-[^1]: Though the document formatting options can be used in many different ways, not all of them with semantic meaning
+[^1]: 
+  Though the document formatting options can be used in many different ways, not all of them with semantic meaning

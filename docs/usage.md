@@ -1,6 +1,4 @@
-# Usage of the reference implementation
-
-## TL;DR
+## 1. TL;DR
 
 The fastest procedure to execute the implementation is to install all the
 required packages and then execute the end-to-end processing script. Asuming
@@ -45,12 +43,12 @@ Additionally:
    detector task, execute `pii-task-info list-languages`
 
 
-## Full process
+## 2. Full process
 
 The whole workflow is structured around a set of [Python libraries], which
 coordinate to perform the whole process. Here we comment some of the stages.
 
-### Detect
+### 2.1. Detect
 
 * The minimum package installation requirement for PII detection is 
   `pii-extract-base` (which will also install `pii-data`). 
@@ -73,7 +71,7 @@ the currently installed capabilities, in terms of locally available plugins,
 languages and tasks.
 
 
-### Preprocess
+### 2.2. Preprocess
 
 In order to process other types of documents, install the `pii-preprocess`
 package. This will add a `pii-preprocess` command-line script that can read
@@ -85,7 +83,7 @@ how to split the document in chunks), Microsoft Word files and CSV
 files. Future packages, or plugins, will add more formats.
 
 
-### Transform
+### 2.3. Transform
 
 The `pii-transform` package can read a PiiCollection and use it to _modify_
 a SourceDocument, replacing PII occurrences with a different string,
@@ -97,7 +95,7 @@ PII transformation in a single execution. This is the one shown in the above
 end-to-end section.
 
 
-## Programmatic API
+## 3. Programmatic API
 
 In addition to command-line operation, the packages also provide a Python API
 that can be used to integrate processing into other workflows. Some examples

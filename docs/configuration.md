@@ -1,13 +1,15 @@
-# PIISA configurations
+## 1. PIISA configurations
 
 All steps in the processing chain in a PIISA framework are meant to be
 configurable. Such configuration can be provided by three means:
+
  * command-line tools provide modifiers as arguments
  * object constructors can also accept some arguments as modifiers
  * configuration files can integrate most of the configuration capabilities
 
 Those configuration files can be written in either YAML or JSON, and have
 three sources:
+
  * packages contain their own local configurations as resource files; those act
    as default configurations
  * package-level configuration files can be supplied at object construction time
@@ -15,13 +17,14 @@ three sources:
    packages) can also be supplied at object construction time
 
 
-## Configuration formats
+## 2. Configuration formats
 
 The base syntax for those files is either YAML or JSON. The contents of one
 configuration file is a dictionary, whose fields depend on the specific
 configuration.
 
 There are however, two standardized fields:
+
   * `format`: this is a *compulsory* field, whose value is a string that
     indicates the type of configuration held by the dictionary (i.e. the
     configuration section; it is typically a package + module identifier).
@@ -30,18 +33,19 @@ There are however, two standardized fields:
 	framework will automatically use the filename as configuration name.
 
 
-### Package level
+### 2.1. Package level
 
 A _package-level configuration_ file has the structure of a dictionary. The
 `format` field for such a file has the general shape 
 `piisa:config:<module>:<section>:v1`, where
+
  * `piisa:config` is a fixed prefix
  * `<module>` identifies which module this configuration is for
  * `<section>` identifies the section in the module that is to be configured
  * `v1` is a version format string.
 
    
-### Full file
+### 2.2. Full file
 
 A _global configuration file_ contains simply a `config` field with a list
 of package configurations, i.e. it is a list of dictionaries, each one with its
@@ -78,9 +82,10 @@ fields with the same name will override/update previous fields).
 
 
 
-## Default configurations
+## 3. Default configurations
 
 Some examples of installed default configuration files are:
+
 * The [loader.json] file in the `pii-preprocess` package maps file extensions
   to file types, and for each type defines a loader to read that document type
 * A [placeholder.json] file in the `pii-transform` package defines the dummy
@@ -89,10 +94,11 @@ Some examples of installed default configuration files are:
   Presidio entities to PIISA entities
 
 
-## Custom configurations
+## 4. Custom configurations
 
 These default files can be replaced at execution time by custom configurations.
 Additionally other aspects of the processing flow can be also modified:
+
 * A [tasks.json] file can be used to define additional PII detection tasks, perhaps coming from custom code
 * A `plugins.json` file can be defined to define the plugins to load, and provide custom arguments to the loader (by default all detected plugins are loaded)
 
