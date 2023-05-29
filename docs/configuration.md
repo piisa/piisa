@@ -1,4 +1,4 @@
-# PIISA configurations
+## 1. PIISA configurations
 
 All steps in the processing chain in a PIISA framework are meant to be
 configurable. Such configuration can be provided by three means:
@@ -17,7 +17,7 @@ three sources:
    packages) can also be supplied at object construction time
 
 
-## Configuration formats
+## 2. Configuration formats
 
 The base syntax for those files is either YAML or JSON. The contents of one
 configuration file is a dictionary, whose fields depend on the specific
@@ -33,7 +33,7 @@ There are however, two standardized fields:
    framework will automatically use the filename as configuration name.
 
 
-### Package level
+### 2.1. Package level
 
 A _package-level configuration_ file has the structure of a dictionary. The
 `format` field for such a file has the general shape 
@@ -45,7 +45,7 @@ A _package-level configuration_ file has the structure of a dictionary. The
  * `v1` is a version format string.
 
    
-### Full file
+### 2.2. Full file
 
 A _global configuration file_ contains simply a `config` field with a list
 of package configurations, i.e. it is a list of dictionaries, each one with its
@@ -85,7 +85,7 @@ The general shape is thus as follows:
 
 
 
-## Default configurations
+## 3. Default configurations
 
 Some examples of installed default configuration files are:
 
@@ -97,13 +97,13 @@ Some examples of installed default configuration files are:
   Presidio entities to PIISA entities
 
 
-## Custom configurations
+## 4. Custom configurations
 
 These default files can be replaced at execution time by custom configurations.
 Additionally other aspects of the processing flow can be also modified:
 
-* A [tasks.json] file can be used to define additional PII detection tasks,
-  perhaps coming from custom code
+* A [tasks.json] file can be used to define additional PII detection tasks, perhaps
+  coming from custom code
 * A `plugins.json` file can be defined to define the plugins to load, and provide
   custom arguments to the loader (by default the PIISA system loads all the plugins it
   can detect)

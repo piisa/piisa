@@ -4,7 +4,7 @@ theme:
 
 nav:
   - Home: index.md
-  - Specification: specs.md
+  - PII Data Specification: specs.md
   - Usage: usage.md
   - Libraries: libraries.md
   - Configuration: configuration.md
@@ -13,3 +13,7 @@ extra:
   social: 
   - icon: fontawesome/brands/github 
     link: https://github.com/piisa/piisa
+    name: GitHub
+  - icon: simple/substack
+    link: https://privacyprotection.substack.com/
+    name: Substack

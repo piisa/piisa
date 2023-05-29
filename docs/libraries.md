@@ -1,4 +1,4 @@
-# Software architecture
+## 1. Software architecture
 
 Our reference implementation for the [PIISA specification] has been developed
 as a set of Python packages:
@@ -28,7 +28,7 @@ as a set of Python packages:
 For a brief initial tutorial for the packages, check out the [usage document].
 
 
-## Source Document
+## 2. Source Document
 
 The abstraction we use to manage original data to be processed is called
 [Source Document]. It is a simple representation of a document that contains:
