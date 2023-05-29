@@ -4,7 +4,8 @@
 
 The fastest procedure to execute the implementation is to install all the
 required packages and then execute the end-to-end processing script. Asuming
-we have an active Python virtualenv (3.8 or later), it would be:
+we have an active Python virtualenv (3.8 or later), setting up the process for
+English would be:
 
 ```
 pip install wheel
@@ -20,8 +21,8 @@ pii-process <input-document> <output-document.yml> --lang en --default-policy la
 
 ... where:
 
- * `<input-document>` is a text, Word o CSV file (the ones currently 
-   supported by pii-preprocess), or a YAML dump of an already-parsed document
+ * `<input-document>` is a text, Word o CSV file (the formats currently supported by
+   the `pii-preprocess` package), or a YAML dump of an already-parsed document
  * `<output-document.yml>` is a YAML representation of the document with
    all found PII entities changed to a label that indicates the type of PII
  * `--lang en` indicates the language to use (using the ISO 639-1 two-letter
@@ -36,13 +37,26 @@ pii-process <input-document> <output-document.yml> --lang en --default-policy la
 Additionally:
 
  * Output document can also be a JSON or text file (just change the file
-   extension), or a _compressed_ file (e.g. use a `name.yml.gz` filename).
+   extension), or an equivalent _compressed_ file (e.g. use a `name.yml.gz` filename).
  * The argument `--save-pii <output>` will save in a JSON file the extracted
    PII entities, as a collection.
  * To get a list of the currently installed capabilities in terms of PII
    detection tasks, execute `pii-task-info list-tasks`
  * To get a list of all languages for which there is at least one available
    detector task, execute `pii-task-info list-languages`
+ * For other languages, there may be models available to detect some of the
+   PII Entities. These models would need to be installed. Check the [Presidio
+   plugin] docs for installation instructions.
+
+
+### Multi-language processing for JSONL files
+
+There is a variant, provided by the [`pii-process-jsonl`] script. This one
+assumes that the format is in JSONL format (a series of lines, each one
+containing a full JSON document), and that each document may be in a different
+language. Provided the languages are supported by the packages, it can
+generate an output JSONL file with the desired transformations on the PII
+instances detected.
 
 
 ## Full process
@@ -88,13 +102,14 @@ files. Future packages, or plugins, will add more formats.
 ### Transform
 
 The `pii-transform` package can read a PiiCollection and use it to _modify_
-a SourceDocument, replacing PII occurrences with a different string,
-according to a set of possible substitution policies.
+a SourceDocument, replacing PII occurrences with a different string, according to a set
+of possible substitution policies.
 
-Thos package provides also a `pii-process` wrapper command-line script that
-works as a combined processing pipeline, including preprocessing, detection and
-PII transformation in a single execution. This is the one shown in the above
-end-to-end section.
+This package provides also two wrapper command-line scripts (as shown in the above
+end-to-end section):
+* `pii-process` works as a combined processing pipeline, including preprocessing,
+  detection and PII transformation of a document in a single execution.
+* [`pii-process-jsonl`] does the same, but for JSONL files
 
 
 ## Programmatic API
@@ -109,13 +124,16 @@ are:
    at various level of detail.
  * the `pii-transform` package contains (check its [api document])
      - an API for PII transformation
-     - wrapper APIs for end-to-end processing
+     - wrapper APIs for end-to-end processing, for both single- and multi-language
+	   processing
 
 
 [a plugin that includes some regex-based detectors]: https://github.com/piisa/pii-extract-plg-regex
 [a plugin that uses Microsoft Presidio]: https://github.com/piisa/pii-extract-plg-presidio
+[Presidio plugin]: https://github.com/piisa/pii-extract-plg-presidio
 [Python libraries]: libraries.md
 [DocumentLoader]: https://github.com/piisa/pii-preprocess/tree/main/doc/loader.md
 [Source Documents]: libraries.md#source-document
 [Python API for PII Detection]: https://github.com/piisa/pii-extract-base/tree/main/doc/usage.md
+[`pii-process-jsonl`]: https://github.com/piisa/pii-transform/tree/main/doc/jsonl.md
 [api document]: https://github.com/piisa/pii-transform/tree/main/doc/api.md
