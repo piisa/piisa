@@ -31,7 +31,7 @@ For a brief initial tutorial for the packages, check out the [usage document].
 ## 2. Source Document
 
 The abstraction we use to manage original data to be processed is called
-[Source Document]. It is a simple representation of a document that contains
+[Source Document]. It is a simple representation of a document that contains:
 
  * a document header, containing some document-level metadata
  * a list of document _chunks_, each one containing a text block extracted
@@ -39,6 +39,10 @@ The abstraction we use to manage original data to be processed is called
    
 On top of this representation a few variants have been defined to carry 
 some particular document structures: _sequence_, _tree_, _table_
+
+Downstream tools (such as the ones in the [pii-extract-base] or [pii-transform] packages)
+can iterate over Source Documents, processing them chunk by chunk (they can also process
+single-chunk documents, for the case in which there is no structure to be used).
 
 
 [PIISA specification]: specs.md

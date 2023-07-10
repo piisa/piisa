@@ -3,7 +3,7 @@
 All steps in the processing chain in a PIISA framework are meant to be
 configurable. Such configuration can be provided by three means:
 
- * command-line tools provide modifiers as arguments
+ * command-line tools can provide modifiers as arguments
  * object constructors can also accept some arguments as modifiers
  * configuration files can integrate most of the configuration capabilities
 
@@ -25,12 +25,12 @@ configuration.
 
 There are however, two standardized fields:
 
-  * `format`: this is a *compulsory* field, whose value is a string that
-    indicates the type of configuration held by the dictionary (i.e. the
-    configuration section; it is typically a package + module identifier).
-  * `name`: a string giving a name to this configuration. This is optional;
-    if it is not present and the configuration is loaded from a file, the
-	framework will automatically use the filename as configuration name.
+ * `format`: this is a *compulsory* field, whose value is a string that
+   indicates the type of configuration held by the dictionary (i.e. the
+   configuration section; it is typically a package + module identifier).
+ * `name`: a string giving a name to this configuration. This is optional;
+   if it is not present and the configuration is loaded from a file, the
+   framework will automatically use the filename as configuration name.
 
 
 ### 2.1. Package level
@@ -50,14 +50,17 @@ A _package-level configuration_ file has the structure of a dictionary. The
 A _global configuration file_ contains simply a `config` field with a list
 of package configurations, i.e. it is a list of dictionaries, each one with its
 `format` key. It carries configuration for all (or many) PIISA modules from
-different packages.
+different packages. This makes possible to encapsulate in a single file
+a configuration for the whole PIISA toolchain.
 
-The full file contains also a global `format` key, whose value is
+A full file contains also a global `format` key, whose value is
 `piisa:config:full:v1`
 
 Note that in a full configuration it is possible to have more than one
 configuration section with the same `format` tag; they will be combined (later
 fields with the same name will override/update previous fields).
+
+The general shape is thus as follows:
 
 
 ```JSON
@@ -99,8 +102,11 @@ Some examples of installed default configuration files are:
 These default files can be replaced at execution time by custom configurations.
 Additionally other aspects of the processing flow can be also modified:
 
-* A [tasks.json] file can be used to define additional PII detection tasks, perhaps coming from custom code
-* A `plugins.json` file can be defined to define the plugins to load, and provide custom arguments to the loader (by default all detected plugins are loaded)
+* A [tasks.json] file can be used to define additional PII detection tasks, perhaps
+  coming from custom code
+* A `plugins.json` file can be defined to define the plugins to load, and provide
+  custom arguments to the loader (by default the PIISA system loads all the plugins it
+  can detect)
 
 
 [loader.json]: https://github.com/piisa/pii-preprocess/blob/main/src/pii_preprocess/resources/doc-loader.json
