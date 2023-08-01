@@ -7,8 +7,7 @@ English would be:
 
 ```
 pip install wheel
-pip install pii-preprocess pii-extract-plg-regex pii-extract-plg-presidio pii-transform
-python -m spacy download en_core_web_lg
+pip install pii-preprocess pii-extract-plg-regex pii-extract-plg-transformers pii-transform
 ```
 
 and then execute
@@ -20,7 +19,7 @@ pii-process <input-document> <output-document.yml> --lang en --default-policy la
 ... where:
 
  * `<input-document>` is a text, Word o CSV file (the formats currently supported by
-   the `pii-preprocess` package), or a YAML dump of an already-parsed document
+   the `pii-preprocess` package), or a YAML dump of an already-parsed document.
  * `<output-document.yml>` is a YAML representation of the document with
    all found PII entities changed to a label that indicates the type of PII
  * `--lang en` indicates the language to use (using the ISO 639-1 two-letter
@@ -34,17 +33,24 @@ pii-process <input-document> <output-document.yml> --lang en --default-policy la
    
 Additionally:
 
+ * An alternative script that can process JSONL multi-documents is
+   [`pii-process-jsonl`], see below.
  * Output document can also be a JSON or text file (just change the file
-   extension), or an equivalent _compressed_ file (e.g. use a `name.yml.gz` filename).
+   extension), or an equivalent _compressed_ file (e.g. use a `name.yml.gz`
+   filename).
  * The argument `--save-pii <output>` will save in a JSON file the extracted
    PII entities, as a collection.
  * To get a list of the currently installed capabilities in terms of PII
    detection tasks, execute `pii-task-info list-tasks`
  * To get a list of all languages for which there is at least one available
    detector task, execute `pii-task-info list-languages`
- * For other languages, there may be models available to detect some of the
-   PII Entities. These models would need to be installed. Check the [Presidio
-   plugin] docs for installation instructions.
+ * For additional languages, there may be models available to detect some of the
+   PII Entities. These models would need to be installed. Check the
+   [Transformers plugin] docs for installation instructions.
+ * In addition to the Transformers-based plugin, there is also another
+   available plugin for model-based PII detection: [Presidio plugin], which
+   uses Microsoft Presidio for detection. It can be used as an alternative, or
+   in combination.
 
 
 ### Multi-language processing for JSONL files
@@ -67,9 +73,12 @@ coordinate to perform the whole process. Here we comment some of the stages.
 * The minimum package installation requirement for PII detection is 
   `pii-extract-base` (which will also install `pii-data`). 
 * However this package does not contain any detectors. Installing a plugin
-  will include detectors. Two plugins are available:
+  will include detectors. Three plugins are available:
     - `pii-extract-plg-regex` will add [a plugin that includes some
 	  regex-based detectors] for PII instances in several languages/countries.
+    - `pii-extract-plg-transformers` will add a [Transformers plugin], which
+	  uses models built with the [Hugging Face Transformers] library to perform
+	  PII instance dectection.
     - `pii-extract-plg-presidio` will add [a plugin that uses Microsoft
 	  Presidio] to perform PII instance dectection. Note that Presidio needs
 	  an NLP engine for its model-based recognizers (the default is to use
@@ -87,21 +96,21 @@ languages and tasks.
 
 ### 2.2. Preprocess
 
-In order to process other types of documents, install the `pii-preprocess`
-package. This will add a `pii-preprocess` command-line script that can read
-documents in other formats, and convert them to YAML Source Documents, hence
-allowing its processing by `pii-detect`.
+In order to process documents in different formats than YAML or JSON, install the
+`pii-preprocess` package. This will add a `pii-preprocess` command-line
+script that can read documents in some other formats and convert them to YAML
+Source Documents, hence allowing its processing by `pii-detect`.
 
 The current supported formats are: plain text files (with different options on
 how to split the document in chunks), Microsoft Word files and CSV
-files. Future packages, or plugins, will add more formats.
+files. Future versions, or plugins, will add more formats.
 
 
 ### 2.3. Transform
 
 The `pii-transform` package can read a PiiCollection and use it to _modify_
-a SourceDocument, replacing PII occurrences with a different string, according to a set
-of possible substitution policies.
+a SourceDocument, replacing PII occurrences with a different string, according to
+a set of possible substitution policies.
 
 This package provides also two wrapper command-line scripts (as shown in the above
 end-to-end section):
@@ -129,6 +138,8 @@ are:
 [a plugin that includes some regex-based detectors]: https://github.com/piisa/pii-extract-plg-regex
 [a plugin that uses Microsoft Presidio]: https://github.com/piisa/pii-extract-plg-presidio
 [Presidio plugin]: https://github.com/piisa/pii-extract-plg-presidio
+[Transformers plugin]: https://github.com/piisa/pii-extract-plg-transformers
+[Hugging Face Transformers]: https://huggingface.co/docs/transformers/main/en/index
 [Python libraries]: libraries.md
 [DocumentLoader]: https://github.com/piisa/pii-preprocess/tree/main/doc/loader.md
 [Source Documents]: libraries.md#source-document
