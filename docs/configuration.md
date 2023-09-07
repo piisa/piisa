@@ -87,29 +87,73 @@ The general shape is thus as follows:
 
 ## 3. Default configurations
 
-Some examples of installed default configuration files are:
+Some examples of provided default configuration files are:
 
 * The [loader.json] file in the `pii-preprocess` package maps file extensions
   to file types, and for each type defines a loader to read that document type
 * A [placeholder.json] file in the `pii-transform` package defines the dummy
   substitution values for the _placeholder_ policy.
+* The [pii-extract-plg-transformers] plugin contains a configuration file to
+  define the models to load and the mappping of model entities to PIISA entities
 * The [pii-extract-plg-presidio] plugin contains a configuration file to map
   Presidio entities to PIISA entities
 
 
 ## 4. Custom configurations
 
-These default files can be replaced at execution time by custom configurations.
-Additionally other aspects of the processing flow can be also modified:
+The default files can be replaced at execution time by custom configurations.
+Additionally other aspects of the processing flow can be also modified with
+additional configurationss:
 
-* A [tasks.json] file can be used to define additional PII detection tasks, perhaps
-  coming from custom code
-* A `plugins.json` file can be defined to define the plugins to load, and provide
-  custom arguments to the loader (by default the PIISA system loads all the plugins it
-  can detect)
+* A task configuration file can be used to define additional PII detection tasks,
+  perhaps coming from custom external code (defining the external tasks by
+  specifying their class paths). There is a [small example] available.
+* A `plugins.json` file can be defined to define the plugins to load, and
+  provide custom arguments to the loader (by default the PIISA system loads all
+  the plugins it can detect)
+
+
+## 5. Dynamic configurations
+
+When using the APIs provided by the PIISA packages, many objects take a
+`config` argument in the constructor. This argument can be a single config
+element or a list of elements (which will be merged). Each config element, in
+turn, can be
+ * a path to a configuration file
+ * a dictionary containing a live configuration object, created on the fly
+
+This live, dynamic configuration is a dictionary, indexed by PIISA section:
+ * The key is the PIISA module package the configuration is for, as a
+   `<module>:<name>:v1` string (i.e. the same string as the `format` field
+   in configuration files, without the `piisa:config:` prefix)
+ * The value contains a standard configuration for that PIISA module
+
+This is an example, in this case containing a custom configuration for the
+`pii-transform` package:
+
+```Python
+
+from pii_data.types import PiiEnum
+from pii_transform.defs import FMT_CONFIG_TRANSFORM
+
+config = {
+    FMT_CONFIG_TRANSFORM: {
+        "default": "annotate",
+        "policy": {
+            PiiEnum.CREDIT_CARD.name: "synthetic",
+            PiiEnum.GOV_ID.name: "label"
+        }
+    }
+}
+```
+
+If used in an object constructor, a custom config will be merged with the default
+config for the module (if it exists), overriding any matching fields and adding
+the new ones.
 
 
 [loader.json]: https://github.com/piisa/pii-preprocess/blob/main/src/pii_preprocess/resources/doc-loader.json
 [placeholder.json]: https://github.com/piisa/pii-transform/blob/main/src/pii_transform/resources/placeholder.json
-[tasks.json]: https://github.com/piisa/pii-extract-base/blob/main/test/data/tasklist-example.json
+[small example]: https://github.com/piisa/pii-extract-base/blob/main/test/data/tasklist-example.json
 [pii-extract-plg-presidio]: https://github.com/piisa/pii-extract-plg-presidio/blob/main/src/pii_extract_plg_presidio/resources/plugin-config.json
+[pii-extract-plg-transformers]: https://github.com/piisa/pii-extract-plg-transformers/blob/main/src/pii_extract_plg_transformers/resources/plugin-config.json
