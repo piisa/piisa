@@ -1,16 +1,20 @@
 ## 1. TL;DR
 
 The fastest procedure to execute the implementation is to install all the
-required packages and then execute the end-to-end processing script. Asuming
-we have an active Python virtualenv (3.8 or later), setting up the process for
-English would be:
+required packages and then execute the end-to-end processing script. We will
+need
+  * An active Python virtualenv (3.8 or later)
+  * [PyTorch installed] in that virtualenv (either for CPU or GPU, depending
+    on hardware availability)
+
+Then setting up the process for English PII processing would be:
 
 ```
 pip install wheel
 pip install pii-preprocess pii-extract-plg-regex pii-extract-plg-transformers pii-transform
 ```
 
-and then execute
+and then we execute:
 
 ```
 pii-process <input-document> <output-document.yml> --lang en --default-policy label
@@ -34,7 +38,7 @@ pii-process <input-document> <output-document.yml> --lang en --default-policy la
 Additionally:
 
  * An alternative script that can process JSONL multi-documents is
-   [`pii-process-jsonl`], see below.
+   [pii-process-jsonl], see below.
  * Output document can also be a JSON or text file (just change the file
    extension), or an equivalent _compressed_ file (e.g. use a `name.yml.gz`
    filename).
@@ -55,7 +59,7 @@ Additionally:
 
 ### Multi-language processing for JSONL files
 
-There is a variant, provided by the [`pii-process-jsonl`] script. This one
+There is a variant, provided by the [pii-process-jsonl] script. This one
 assumes that the format is in JSONL format (a series of lines, each one
 containing a full JSON document), and that each document may be in a different
 language. Provided the languages are supported by the packages, it can
@@ -109,14 +113,16 @@ files. Future versions, or plugins, will add more formats.
 ### 2.3. Transform
 
 The `pii-transform` package can read a PiiCollection and use it to _modify_
-a SourceDocument, replacing PII occurrences with a different string, according to
-a set of possible substitution policies.
+a SourceDocument, replacing PII occurrences with a different string, according
+to a set of possible substitution policies.
 
-This package provides also two wrapper command-line scripts (as shown in the above
-end-to-end section):
-* `pii-process` works as a combined processing pipeline, including preprocessing,
-  detection and PII transformation of a document in a single execution.
-* [`pii-process-jsonl`] does the same, but for JSONL files
+This package provides also two wrapper command-line scripts (as shown in the
+above end-to-end section):
+
+* `pii-process` works as a combined processing pipeline, including
+  preprocessing, detection and PII transformation of a document in a single
+  execution.
+* [pii-process-jsonl] does the same, but for JSONL files
 
 
 ## 3. Programmatic API
@@ -144,5 +150,6 @@ are:
 [DocumentLoader]: https://github.com/piisa/pii-preprocess/tree/main/doc/loader.md
 [Source Documents]: libraries.md#source-document
 [Python API for PII Detection]: https://github.com/piisa/pii-extract-base/tree/main/doc/usage.md
-[`pii-process-jsonl`]: https://github.com/piisa/pii-transform/tree/main/doc/jsonl.md
+[pii-process-jsonl]: https://github.com/piisa/pii-transform/tree/main/doc/jsonl.md
 [api document]: https://github.com/piisa/pii-transform/tree/main/doc/api.md
+[PyTorch installed]: https://pytorch.org/get-started/locally/

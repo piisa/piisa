@@ -35,8 +35,8 @@ compose a full solution_
 ## 4. Usage
 
 We are developing a reference software of this specification, delivered as a
-set of Python packages that implement each block in the architecture. Check [Libraies](libraries.md) 
-and an introductory [usage document](usage.md) to find
+set of Python packages that implement each block in the architecture. Check the
+[libraries](libraries.md) and an introductory [usage document](usage.md) to find
 out how it has been structured and how to use it.
 
 
