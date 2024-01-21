@@ -22,12 +22,12 @@ as a set of Python packages:
    Transformers] library.
  * [pii-extract-plg-presidio] is a pii-extract plugin that implements some PII
    Detectors by calling the [Microsoft Presidio] library.
- * pii-decide (will) implement the _Decision_ block
+ * [pii-decide] implements the _Decision_ block
  * [pii-transform] implements the PII _Transform_ block of the architecture:
    it takes a PII Collection created by pii-extract (and confirmed by 
    pii-decide), and replaces/modifies the PII strings in the original Source
-   Document. It also provides some end-to-end API objects and command-line
-   scripts.
+   Document.
+ * [pii-process] provides some end-to-end API objects and command-line scripts.
 
 For a brief initial tutorial for the packages, check out the [usage document].
 
@@ -50,15 +50,19 @@ single-chunk documents, for the case in which there is no structure to be used).
 
 
 [PIISA specification]: specs.md
+
 [pii-data]: https://github.com/piisa/pii-data
 [pii-preprocess]: https://github.com/piisa/pii-preprocess
 [pii-extract-base]: https://github.com/piisa/pii-extract-base
 [pii-extract-plg-regex]: https://github.com/piisa/pii-extract-plg-regex
 [pii-extract-plg-presidio]: https://github.com/piisa/pii-extract-plg-presidio
 [pii-extract-plg-transformers]: https://github.com/piisa/pii-extract-plg-transformers
-[pii-transform]: https://github.com/piisa/pii-transform
 [pii-decide]: https://github.com/piisa/pii-decide
+[pii-transform]: https://github.com/piisa/pii-transform
+[pii-process]: https://github.com/piisa/pii-process
+
 [source document]: https://github.com/piisa/pii-data/tree/main/doc/srcdocument.md
 [usage document]: usage.md
+
 [Microsoft Presidio]: https://microsoft.github.io/presidio/
 [Hugging Face Transformers]: https://huggingface.co/docs/transformers/main/en/index
